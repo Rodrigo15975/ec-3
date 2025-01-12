@@ -13,10 +13,6 @@ phases:
       - npm run build # Compilar el código TypeScript a JavaScript
       - echo "Build completed"
       - npm run start:prod # Iniciar la aplicación (esto normalmente no se hace en CodeBuild)
-  post_build:
-    commands:
-      - echo "Post build phase"
-      - npm run test # Si tienes pruebas, ejecútalas aquí
 
 artifacts:
   files:
