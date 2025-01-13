@@ -3,25 +3,39 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 20
+      nodejs: 18
     commands:
-      - echo "Installing dependencies..."
-      - npm install # Instalar dependencias
+      # Instalar dependencias globales si es necesario
+      - npm install -g @nestjs/cli
+
+  pre_build:
+    commands:
+      # Instalar dependencias del proyecto
+      - npm install
   build:
     commands:
-      - echo "Building the project..."
-      - npm run build # Compilar el código TypeScript a JavaScript
-      - echo "Build completed"
-      - npm run start:prod # Iniciar la aplicación (esto normalmente no se hace en CodeBuild)
+      # Construir la aplicación
+      - npm run build
+      # Crear archivo para las variables de entorno si es necesario
+      - echo "NODE_ENV=production" > .env
+
+  post_build:
+    commands:
+      # Preparar archivos para el deploy
+      - cp package.json dist/
+      - cp package-lock.json dist/
+      - cd dist
+      - npm install --production
 
 artifacts:
   files:
-    - "dist/**/*" # Archivos transpilados y de salida
+    - package.json
+    - package-lock.json
+    - .env
+    - dist/**/*
+    - node_modules/**/*
+  base-directory: "."
 
 cache:
   paths:
-    - "/root/.npm/**/*" # Caché para dependencias npm
-
-env:
-  variables:
-    NODE_ENV: production
+    - "node_modules/**/*"
