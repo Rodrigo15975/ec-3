@@ -1,23 +1,6 @@
-version: 0.0
+---
+version: 0
 os: linux
 files:
-  - source: /dist/
-    destination: /home/ec2-user/nestjs-app
-  - source: /package.json
-    destination: /home/ec2-user/nestjs-app
-  - source: /package-lock.json
-    destination: /home/ec2-user/nestjs-app
-
-hooks:
-  BeforeInstall:
-    - location: scripts/install_dependencies.sh
-      timeout: 180
-  AfterInstall:
-    - location: scripts/start_server.sh
-      timeout: 180
-  ApplicationStart:
-    - location: scripts/start_application.sh
-      timeout: 180
-  ApplicationStop:
-    - location: scripts/stop_application.sh
-      timeout: 180
+  - source: /home/ubuntu/ec-4
+    destination: .
