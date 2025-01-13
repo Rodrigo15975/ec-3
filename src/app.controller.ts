@@ -9,22 +9,10 @@ export class AppController {
     },
   ];
 
-  // constructor(@Inject('CACHE_INSTANCE') private readonly cache: Cacheable) {
-  //   console.log(cache);
-  // }
   @Get()
   async getHello() {
-    // const tasksCache = await this.cache.get('tasks');
-    // if (tasksCache)
-    // return {
-    //   tasks: tasksCache,
-    //   message: 'Caching',
-    //   statuCode: HttpStatus.OK,
-    // };
-    // await this.cache.set('tasks', this.tasks);
-
     return {
-      message: 'No caching',
+      message: 'Get all tasks',
       tasks: this.tasks,
       statuCode: HttpStatus.OK,
     };
