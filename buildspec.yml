@@ -1,41 +1,26 @@
 version: 0.2
-
-phases:
-  install:
-    runtime-versions:
-      nodejs: 18
-    commands:
-      # Instalar dependencias globales si es necesario
-      - npm install -g @nestjs/cli
-
-  pre_build:
-    commands:
-      # Instalar dependencias del proyecto
-      - npm install
-  build:
-    commands:
-      # Construir la aplicación
-      - npm run build
-      # Crear archivo para las variables de entorno si es necesario
-      - echo "NODE_ENV=production" > .env
-
-  post_build:
-    commands:
-      # Preparar archivos para el deploy
-      - cp package.json dist/
-      - cp package-lock.json dist/
-      - cd dist
-      - npm install --production
-
-artifacts:
-  files:
-    - package.json
-    - package-lock.json
-    - .env
-    - dist/**/*
-    - node_modules/**/*
-  base-directory: "."
-
-cache:
-  paths:
-    - "node_modules/**/*"
+os: linux
+files:
+  - source: /
+    destination: /home/ec2-user/app
+hooks:
+  ApplicationStop:
+    - location: scripts/stop_application.sh
+      timeout: 300
+      runas: ec2-user
+  BeforeInstall:
+    - location: scripts/before_install.sh
+      timeout: 300
+      runas: ec2-user
+  AfterInstall:
+    - location: scripts/after_install.sh
+      timeout: 300
+      runas: ec2-user
+  ApplicationStart:
+    - location: scripts/start_application.sh
+      timeout: 300
+      runas: ec2-user
+  ValidateService:
+    - location: scripts/validate_service.sh
+      timeout: 300
+      runas: ec2-user
